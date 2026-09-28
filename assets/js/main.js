@@ -67,7 +67,7 @@ const SCENARIOS = [
     ["work", "E-Mail wird formuliert", "Bestätigungsmail an die Eltern"],
     ["ask", "Vorschau ansehen und freigeben?", "ja"],
     ["live", "gemeinde.de/kinderfreizeit"],
-    ["note", "Backups, Updates und Datenschutz laufen automatisch."],
+    ["note", "Läuft auf eurem Server. Backups sind eingerichtet."],
   ],
   [
     ["user", "Ordne die neuen Belege aus dem Postfach zu"],
@@ -85,7 +85,7 @@ const SCENARIOS = [
     ["work", "Seite wird geprüft", "Fürs Handy optimiert und barrierearm"],
     ["ask", "Veröffentlichen?", "ja"],
     ["live", "gemeinde.de/sommerfest"],
-    ["note", "Sichere Verbindung, Backups und Monitoring aktiv."],
+    ["note", "Auf eurem Server – mit sicherer Verbindung und Backup."],
   ],
 ];
 
