@@ -407,25 +407,27 @@
               <input type="text" name="name" autocomplete="name" required>
             </label>
             <label class="field">
-              <span>Gemeinde</span>
+              <span>Gemeinde <small>(optional)</small></span>
               <input type="text" name="gemeinde" autocomplete="organization">
             </label>
           </div>
-           <label class="field">
-            <span>E-Mail</span>
-            <input type="email" name="email" autocomplete="email" required>
-          </label>
-          <label class="field">
-            <span>Telefonnummer</span>
-            <input type="tel" name="phone" autocomplete="tel">
-          </label>
+          <div class="form__row">
+            <label class="field">
+              <span>E-Mail</span>
+              <input type="email" name="email" autocomplete="email" required>
+            </label>
+            <label class="field">
+              <span>Telefon <small>(optional)</small></span>
+              <input type="tel" name="telefon" autocomplete="tel">
+            </label>
+          </div>
           <label class="field">
             <span>Wo geht bei euch gerade die meiste Zeit verloren?</span>
             <textarea name="nachricht" rows="4" required></textarea>
           </label>
           <!-- Honeypot gegen Spam-Bots -->
           <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-          <div class="h-captcha" data-captcha="true"></div>
+          <div class="h-captcha" data-captcha="true" data-theme="dark" data-lang="de"></div>
           <button class="btn btn--light btn--block" type="submit">Nachricht senden</button>
           <p class="form__status" id="form-status" role="status" aria-live="polite"></p>
           <p class="form__hint">Mit dem Absenden stimmt ihr zu, dass wir eure Angaben zur Beantwortung der Anfrage verwenden. Mehr dazu in der <a href="datenschutz.html">Datenschutzerklärung</a>.</p>

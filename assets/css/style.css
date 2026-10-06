@@ -471,6 +471,8 @@ p:last-child { margin-bottom: 0; }
 .chips input:checked + span { background: var(--mint); border-color: var(--mint); color: var(--dark); }
 .chips input:focus-visible + span { outline: 3px solid var(--mint); outline-offset: 2px; }
 
+.field small { font-weight: 400; color: #93a59b; }
+.h-captcha { min-height: 78px; }
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 .form__status:empty { display: none; }
 .form__status { margin: 0; font-size: .95rem; font-weight: 600; color: var(--mint); }

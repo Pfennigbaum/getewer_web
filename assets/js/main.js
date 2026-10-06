@@ -211,11 +211,24 @@ if (term) {
 /* ───────────── Kontaktformular ───────────── */
 const form = document.getElementById("contact-form");
 const status = document.getElementById("form-status");
+const captchaBox = form.querySelector(".h-captcha");
 
 const setStatus = (msg, isError = false) => {
   status.textContent = msg;
   status.classList.toggle("is-error", isError);
 };
+
+// Lädt das Captcha nicht (z. B. durch Tracking-Schutz oder Werbeblocker), Hinweis mit Alternative zeigen
+if (captchaBox) {
+  setTimeout(() => {
+    if (!captchaBox.querySelector("iframe")) {
+      setStatus(
+        `Die Spam-Prüfung konnte nicht geladen werden – evtl. blockiert euer Browser sie. Schreibt uns alternativ direkt an ${CONFIG.email}.`,
+        true
+      );
+    }
+  }, 8000);
+}
 
 form.addEventListener("submit", async (ev) => {
   ev.preventDefault();
@@ -241,21 +254,34 @@ form.addEventListener("submit", async (ev) => {
   const name = data.get("name").trim();
   const gemeinde = data.get("gemeinde").trim();
   const email = data.get("email").trim();
+  const telefon = data.get("telefon").trim();
   const nachricht = data.get("nachricht").trim();
   const subject = `Anfrage Erstgespräch${gemeinde ? ` – ${gemeinde}` : ""}`;
 
   // Variante A: Form-Dienst (direkter Versand)
   if (CONFIG.formEndpoint) {
+    // hCaptcha legt seine Antwort als Feld "h-captcha-response" ins Formular
+    const captcha = data.get("h-captcha-response");
+    if (captchaBox && !captcha) {
+      setStatus("Bitte bestätigt noch kurz, dass ihr kein Roboter seid.", true);
+      return;
+    }
+
     const btn = form.querySelector("button[type=submit]");
     btn.disabled = true;
+    setStatus("Wird gesendet …");
     try {
       const payload = {
         subject,
+        from_name: "getewer.de",
+        replyto: email,
         name,
         gemeinde,
         email,
+        telefon,
         themen: themen.join(", "),
         nachricht,
+        ...(captcha && { "h-captcha-response": captcha }),
         ...(CONFIG.accessKey && { access_key: CONFIG.accessKey }),
       };
       const res = await fetch(CONFIG.formEndpoint, {
@@ -263,13 +289,16 @@ form.addEventListener("submit", async (ev) => {
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error(res.statusText);
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok || json.success === false) throw new Error(json.message || res.statusText);
       form.reset();
       setStatus("Danke! Eure Nachricht ist angekommen. Wir melden uns in Kürze.");
-    } catch {
+    } catch (err) {
+      console.error("Kontaktformular:", err);
       setStatus(`Das hat leider nicht geklappt. Schreibt uns gern direkt an ${CONFIG.email}.`, true);
     } finally {
       btn.disabled = false;
+      window.hcaptcha?.reset(); // Captcha-Token gilt nur einmal
     }
     return;
   }
@@ -279,6 +308,7 @@ form.addEventListener("submit", async (ev) => {
     `Name: ${name}`,
     gemeinde && `Gemeinde: ${gemeinde}`,
     `E-Mail: ${email}`,
+    telefon && `Telefon: ${telefon}`,
     themen.length && `Themen: ${themen.join(", ")}`,
   ].filter(Boolean);
   const body = `${details.join("\n")}\n\n${nachricht}`;
