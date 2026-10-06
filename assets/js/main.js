@@ -8,8 +8,8 @@
  */
 const CONFIG = {
   email: ["moin", "getewer.de"].join("@"),
-  formEndpoint: "",
-  accessKey: "",
+  formEndpoint: "https://api.web3forms.com/submit",
+  accessKey: "007dabb9-a28b-4067-976f-a27c00cca87b",
 };
 
 document.documentElement.classList.add("js");
